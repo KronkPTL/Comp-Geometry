@@ -2,7 +2,7 @@
 Homework + Project
 
 # Project statement
-**Position of a point in a convex polygon.**
+**Position of a point in a convex polygon with graphic illustration.**
 
 **Input**: A convex polygon P from R2, a point A ∈ R2.
 
