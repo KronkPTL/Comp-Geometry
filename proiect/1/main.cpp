@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
-#include <graphics.h>
+#include "graphics.h"
 #include <conio.h>
 
 using namespace std;
@@ -52,36 +52,38 @@ int triangulation(punct a, punct b, punct c, punct d)
     ///POINT d is inside the triangle if its orientation towards every segment is the same
     int x,y,z;
 
-    x = orientation(a,b,d);
-    y = orientation(b,c,d);
-    z = orientation(c,a,d);
+    x = orientation(a, b, d);
+    y = orientation(b, c, d);
+    z = orientation(c, a, d);
 
     if ( x == y && y == z ) ///inside the triangle
         return 1;
 
     else if ( x == 1 ) ///on AB
-        if ( verifySegment(a,b,d) == true ) return 1;
+        if ( verifySegment(a, b, d) == true ) return 1;
 
     else if ( y == 1 )
         {
-            if ( verifySegment(b,c,d) == true )
+            if ( verifySegment(b, c, d) == true )
                 return 2;
         } ///on BC
 
-        if ( verifySegment(b,c,d) == true )
+        if ( verifySegment(b, c, d) == true )
         {
             return 2;
         }
 
     else if ( z == 1 ) ///on AC
 
-        if ( verifySegment(c,a,d) == true ) return 1;
+        if ( verifySegment(c, a, d) == true ) return 1;
 
     return 0;///not inside of the triangle
 }
 
+
 int main()
 {
+
     ifstream fin("date.in");
     int n, i, j;
     fin >> n;
@@ -89,12 +91,13 @@ int main()
         cout << "The inserted points do not form a convex polygon";
     else
     {
+
         punct P;
         punct *v;
 
-        v = new punct[n+1];
+        v = new punct[n + 3];
 
-        for ( i = 0; i <= n; i++ )
+        for ( i = 0; i < n; i++ )
             fin >> v[i].x >> v[i].y;
 
         fin >> P.x >> P.y;
@@ -104,7 +107,7 @@ int main()
 
         for( i = 1; i < n-1 && !insideTriangle; i++ )
         {
-            j = triangulation(v[0], v[i], v[i+1], P);
+            j = triangulation(v[0], v[i], v[i + 1], P);
             if ( j == 1 )
                 insideTriangle = 1;
             else if ( j == 2 )
@@ -113,8 +116,8 @@ int main()
 
         if ( insideTriangle )
         {
-            punct1 = 'A'+i-1;
-            punct2 = 'A'+i;
+            punct1 = 'A' + i - 1;
+            punct2 = 'A' + i;
         }
 
         if ( verifySegment(v[0], v[1], P) == true )
@@ -128,7 +131,7 @@ int main()
         {
             insideTriangle = 2;
             punct1 = 'A';
-            punct2 = 'A'+(n-1);
+            punct2 = 'A' + (n - 1);
         }
 
         if ( insideTriangle == 0 )
@@ -139,46 +142,47 @@ int main()
         else
             cout << "The punct is on the edge of the polygon formed by: " << punct1 << ", " << punct2 << "\n";
 
-        //---------------Reprezentare grafica ----------------------
+
+
+
+        ///---------------Reprezentare grafica ----------------------
 
         int gd = DETECT, gm;
         initgraph(&gd, &gm, "C:\\TC\\BGI");
 
 
     ///Reper XoY
-      /*  line (0, getmaxy()/2, getmaxx(), getmaxy()/2);
-        line (getmaxx()/2, 0, getmaxx()/2, getmaxy());
-
-        outtextxy (getmaxx()/2 + 5, 0, "y");
-        outtextxy (getmaxx() - 15, getmaxy()/2 - 18, "x");*/
 
         putpixel(P.x, P.y, WHITE);
-        putpixel(P.x+1, P.y+1, WHITE);
-        putpixel(P.x-1, P.y-1, WHITE);
-        putpixel(P.x-1, P.y+1, WHITE);
-        putpixel(P.x+1, P.y-1, WHITE);
-        putpixel(P.x+1, P.y, WHITE);
-        putpixel(P.x, P.y+1, WHITE);
-        putpixel(P.x-1, P.y, WHITE);
-        putpixel(P.x, P.y-1, WHITE);
+        putpixel(P.x + 1, P.y + 1, WHITE);
+        putpixel(P.x - 1, P.y - 1, WHITE);
+        putpixel(P.x - 1, P.y + 1, WHITE);
+        putpixel(P.x + 1, P.y - 1, WHITE);
+        putpixel(P.x + 1, P.y, WHITE);
+        putpixel(P.x, P.y + 1, WHITE);
+        putpixel(P.x - 1, P.y, WHITE);
+        putpixel(P.x, P.y - 1, WHITE);
 
         outtextxy(P.x - 10, P.y - 10, "P");
 
         int vectDim = 0;
-        int puncts[(n+1)*2+1];
+        int puncts[(n + 1) * 2 + 1];
 
-        for ( int i = 0; i <= n; i++ )
+        for ( int i = 0; i < n; i++ )
         {
             puncts[vectDim++] = v[i].x;
             puncts[vectDim++] = v[i].y;
         }
 
-        drawpoly(n+1, puncts);
+        drawpoly(n , puncts);
+
+        line(v[0].x, v[0].y, v[n - 1].x, v[n - 1].y);
 
         setlinestyle(2, 0, 1);
 
-        for ( int i = 2; i < n-1; i++ )
+        for ( int i = 2; i < n ; i++ ) ///de la A le trage la toate !!!!
                 line(v[0].x, v[0].y, v[i].x, v[i].y);
+
 
         for ( int i = 0; i < n; i++ )
         {
@@ -266,5 +270,7 @@ int main()
     }
 
 
+
     return 0;
 }
+
